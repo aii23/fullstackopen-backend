@@ -2,8 +2,9 @@ const express = require("express");
 const morgan = require("morgan");
 const app = express();
 
+app.use(express.static("dist"));
+
 morgan.token("postBody", function (req, res) {
-    console.log(req.body);
     if (req.method === "POST") {
         return JSON.stringify(req.body);
     }
@@ -90,15 +91,18 @@ app.post("/api/persons/", (request, response) => {
         return;
     }
 
-    persons.push({
+    const newPerson = {
         ...person,
         id: nextId(),
-    });
-    response.json(person);
+    };
+
+    persons.push(newPerson);
+    response.json(newPerson);
 });
 
 app.delete("/api/persons/:id", (request, response) => {
     const id = Number(request.params.id);
+
     if (!persons.map((person) => person.id).includes(id)) {
         response.status(404).end();
         return;
