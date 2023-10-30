@@ -1,7 +1,21 @@
 const express = require("express");
+const morgan = require("morgan");
 const app = express();
 
+morgan.token("postBody", function (req, res) {
+    console.log(req.body);
+    if (req.method === "POST") {
+        return JSON.stringify(req.body);
+    }
+    return null;
+});
+
 app.use(express.json());
+app.use(
+    morgan(
+        ":method :url :status :res[content-length] - :response-time ms :postBody"
+    )
+);
 
 let persons = [
     {
@@ -75,8 +89,11 @@ app.post("/api/persons/", (request, response) => {
         response.status(500).send(checkError);
         return;
     }
-    person.id = nextId();
-    persons.push(person);
+
+    persons.push({
+        ...person,
+        id: nextId(),
+    });
     response.json(person);
 });
 
