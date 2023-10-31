@@ -13,7 +13,10 @@
     "author": "Aleksandr Ivlev",
     "license": "ISC",
     "dependencies": {
+        "dotenv": "^16.3.1",
         "express": "^4.18.2",
+        "mongodb": "^6.2.0",
+        "mongoose": "^8.0.0",
         "morgan": "^1.10.0"
     },
     "devDependencies": {
