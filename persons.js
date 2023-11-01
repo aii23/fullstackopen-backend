@@ -1,19 +1,19 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-mongoose.set("strictQuery", false);
+mongoose.set('strictQuery', false);
 
 const url = process.env.MONGODB_URI;
 
-console.log("connecting to database");
+console.log('connecting to database');
 
 mongoose
     .connect(url)
 
-    .then((result) => {
-        console.log("connected to MongoDB");
+    .then(() => {
+        console.log('connected to MongoDB');
     })
     .catch((error) => {
-        console.log("error connecting to MongoDB:", error.message);
+        console.log('error connecting to MongoDB:', error.message);
     });
 
 const personSchema = new mongoose.Schema({
@@ -26,21 +26,21 @@ const personSchema = new mongoose.Schema({
         type: String,
         minLength: 8,
         validate: {
-            validator: (v) => {
-                return /\d{2,3}-\d*/.test(v);
-            },
+            validator: (v) => /\d{2,3}-\d*/.test(v),
             message: (props) => `${props.value} is not valid number`,
         },
         required: true,
     },
 });
 
-personSchema.set("toJSON", {
+personSchema.set('toJSON', {
     transform: (document, returnedObject) => {
+        /* eslint-disable no-underscore-dangle */
         returnedObject.id = returnedObject._id.toString();
         delete returnedObject._id;
         delete returnedObject.__v;
+        /* eslint-enable no-underscore-dangle */
     },
 });
 
-module.exports = mongoose.model("Persons", personSchema);
+module.exports = mongoose.model('Persons', personSchema);
